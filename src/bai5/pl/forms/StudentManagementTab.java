@@ -40,6 +40,11 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
     private JTextField diemTBMinFilterTextField;
     private JTextField diemTBMaxFilterTextField;
 
+    // Sort
+    private JPanel sortPanel;
+    private JRadioButton diemTBAscRBtn;
+    private JRadioButton diemTBDescRBtn;
+
     public StudentManagementTab() {
         setLayout(new BorderLayout());
 
@@ -51,9 +56,14 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
         createControlPanel();
         add(controlPanel, BorderLayout.SOUTH);
 
-        // Filter panel
+        // Filter add sort panel
         createFilterPanel();
-        add(filterPanel, BorderLayout.NORTH);
+        createSortPanel();
+
+        JPanel filterAndSortPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        filterAndSortPanel.add(filterPanel);
+        filterAndSortPanel.add(sortPanel);
+        add(filterAndSortPanel, BorderLayout.NORTH);
 
         // Handle listeners
         studentTable.getSelectionModel().addListSelectionListener(e -> {
@@ -141,10 +151,24 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
                 case "DiemTB" -> filterByDiemTB();
             }
         });
+
+        diemTBAscRBtn.addActionListener(e -> {
+            if (diemTBAscRBtn.isSelected()) {
+                diemTBDescRBtn.setSelected(false);
+                refreshStudents();
+            }
+        });
+
+        diemTBDescRBtn.addActionListener(e -> {
+            if (diemTBDescRBtn.isSelected()) {
+                diemTBAscRBtn.setSelected(false);
+                refreshStudents();
+            }
+        });
     }
 
     private void loadStudents() {
-        List<SinhVienDTO> studentList = _studentBLL.getAllStudents();
+        List<SinhVienDTO> studentList = _studentBLL.getAllStudentsSortByAvgScoreDesc();
         studentTableModel = new SinhVienTableModel(studentList);
         studentTable = new JTable(studentTableModel);
         studentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -152,7 +176,13 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
     }
 
     private void refreshStudents() {
-        List<SinhVienDTO> studentList = _studentBLL.getAllStudents();
+        List<SinhVienDTO> studentList;
+        if (diemTBDescRBtn.isSelected()) {
+            studentList = _studentBLL.getAllStudentsSortByAvgScoreDesc();
+        } else {
+            studentList = _studentBLL.getAllStudentsSortByAvgScoreAsc();
+        }
+
         studentTableModel.setStudents(studentList);
 
         maSVTextField.setText("");
@@ -205,6 +235,20 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
 
         filterBtn = new JButton("Lọc");
         filterPanel.add(filterBtn);
+    }
+
+    private void createSortPanel() {
+        sortPanel = new JPanel(new GridLayout(1, 5, 10, 10));
+        sortPanel.add(new JLabel(""));
+        sortPanel.add(new JLabel(""));
+        sortPanel.add(new JLabel("Sắp xếp bởi:"));
+        diemTBAscRBtn = new JRadioButton();
+        diemTBAscRBtn.setText("Điểm TB tăng dần");
+        sortPanel.add(diemTBAscRBtn);
+        diemTBDescRBtn = new JRadioButton();
+        diemTBDescRBtn.setText("Điểm TB giảm dần");
+        diemTBDescRBtn.setSelected(true);
+        sortPanel.add(diemTBDescRBtn);
     }
 
     private JPanel createMaSVFilterPanel() {

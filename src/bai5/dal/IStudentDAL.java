@@ -9,7 +9,8 @@ import java.util.List;
 public interface IStudentDAL {
     MessageDTO addStudent(SinhVienDTO student);
     MessageDTO deleteStudent(String maSV);
-    List<SinhVienDTO> getAllStudents();
+    List<SinhVienDTO> getAllStudentsSortByAvgScoreAsc();
+    List<SinhVienDTO> getAllStudentsSortByAvgScoreDesc();
     List<SinhVienDTO> getStudentsByClassId(String maLop);
     SinhVienListMessageDTO getStudentsFilteredByAvgScore(float diemTBMinValue, float diemTBMaxValue);
     List<SinhVienDTO> getStudentsFilteredByClass(String lopFilter);

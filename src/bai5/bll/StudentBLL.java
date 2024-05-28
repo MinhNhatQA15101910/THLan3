@@ -106,8 +106,13 @@ public class StudentBLL implements IStudentBLL {
     }
 
     @Override
-    public List<SinhVienDTO> getAllStudents() {
-        return _studentDAL.getAllStudents();
+    public List<SinhVienDTO> getAllStudentsSortByAvgScoreDesc() {
+        return _studentDAL.getAllStudentsSortByAvgScoreDesc();
+    }
+
+    @Override
+    public List<SinhVienDTO> getAllStudentsSortByAvgScoreAsc() {
+        return _studentDAL.getAllStudentsSortByAvgScoreAsc();
     }
 
     @Override

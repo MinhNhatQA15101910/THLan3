@@ -51,11 +51,35 @@ public class StudentDAL implements IStudentDAL {
     }
 
     @Override
-    public List<SinhVienDTO> getAllStudents() {
+    public List<SinhVienDTO> getAllStudentsSortByAvgScoreAsc() {
         List<SinhVienDTO> studentList = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
             Statement stmt = conn.createStatement();
-            ResultSet rsData = stmt.executeQuery("SELECT * FROM SinhVien");
+            ResultSet rsData = stmt.executeQuery("SELECT * FROM SinhVien ORDER BY DiemTB ASC");
+
+            while (rsData.next()) {
+                studentList.add(
+                        new SinhVienDTO(
+                                rsData.getString("MaSV"),
+                                rsData.getString("HoTen"),
+                                rsData.getString("Lop"),
+                                rsData.getFloat("DiemTB")
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
+
+    @Override
+    public List<SinhVienDTO> getAllStudentsSortByAvgScoreDesc() {
+        List<SinhVienDTO> studentList = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            Statement stmt = conn.createStatement();
+            ResultSet rsData = stmt.executeQuery("SELECT * FROM SinhVien ORDER BY DiemTB DESC");
 
             while (rsData.next()) {
                 studentList.add(

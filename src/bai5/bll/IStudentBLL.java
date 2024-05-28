@@ -13,6 +13,7 @@ public interface IStudentBLL {
     List<SinhVienDTO> getStudentsFilteredByClass(String lopFilter);
     List<SinhVienDTO> getStudentsFilteredByFullName(String hoTenFilter);
     List<SinhVienDTO> getStudentsFilteredById(String maSVFilter);
-    List<SinhVienDTO> getAllStudents();
+    List<SinhVienDTO> getAllStudentsSortByAvgScoreDesc();
+    List<SinhVienDTO> getAllStudentsSortByAvgScoreAsc();
     MessageDTO updateStudent(SinhVienDTO student, String avgScore);
 }
